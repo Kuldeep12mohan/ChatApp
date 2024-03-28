@@ -9,6 +9,7 @@ const Sidebar = () => {
   const [sender,setSender] = useState('');
   const [notification,setNotification] = useState([]);
   const debouncedSearchTerm = useDebounce(searchTerm, 100);
+  const [selectedItem, setSelectedItem] = useState(null);
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -27,11 +28,24 @@ const Sidebar = () => {
     };
     fetchUser();
   }, [debouncedSearchTerm]);
+  const handleItemClick = (item) => {
+    setSelectedItem(item);
+    navigate(`/?sender=${sender.username}&receiver=${item.username}`);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate('/login');
+  }
+
   return (
     <div className="w-64 bg-gray-900 text-white p-4">
        <div className="fixed inset-y-0 left-0 w-64 bg-gray-900 text-white p-4">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold">{sender.username}</h1>
+        <button onClick={handleLogout} className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">
+          Logout
+        </button>
       </div>
       <div className="mb-4">
         <input
@@ -45,16 +59,11 @@ const Sidebar = () => {
         {userList.map((item,index)=>
         {
           return(
-            <li onClick={()=>
-            {
-              navigate(`/?sender=${sender.username}&receiver=${item.username}`);
-            }} key={index} className="py-2 hover:bg-gray-800 cursor-pointer">{item.username}</li>
+            <li  onClick={() => handleItemClick(item)} key={index}
+            className={`py-2 hover:bg-gray-800 cursor-pointer ${selectedItem === item ? 'bg-gray-600' : ''}`}>{item.username}</li>
           );
         })}
-       
-        {/* <li className="py-2 hover:bg-gray-800 cursor-pointer">Dhruv</li>
-        <li className="py-2 hover:bg-gray-800 cursor-pointer">Paras</li>
-        <li className="py-2 hover:bg-gray-800 cursor-pointer">Swati</li> */}
+      
       </ul>
     </div>
     </div>
