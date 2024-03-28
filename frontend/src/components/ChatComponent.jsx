@@ -1,13 +1,33 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import EmojiPicker from "emoji-picker-react"; // Update import statement
+
 const ChatComponent = ({ sender, receiver }) => {
   const [newMessage, setNewMessage] = useState("");
   const [sentMessage, setSentMessage] = useState(null);
   const [messages, setMessages] = useState([]);
-  const handleSendMessage = async() => {
-    if (newMessage.trim() !== "") {
-      setSentMessage({ sender: sender, receiver: receiver, text: newMessage });
+  const [chosenEmoji, setChosenEmoji] = useState(null); // State to hold selected emoji
+
+  const handleEmojiClick = (emojiObject) => {
+    setChosenEmoji(emojiObject);
+    setNewMessage(prev=>(prev+emojiObject.emoji));
+  };
+
+  const handleSendMessage = async () => {
+    let messageText = newMessage.trim();
+    if (chosenEmoji) {
+      messageText += chosenEmoji.emoji; // Append chosen emoji to the message
+      setChosenEmoji(null); // Clear chosen emoji after sending
+    }
+    if (messageText !== "") {
+      setSentMessage({ sender: sender, receiver: receiver, text: messageText });
       setNewMessage("");
+    }
+  };
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault(); // Prevent default behavior of new line on Enter
+      handleSendMessage();
     }
   };
   useEffect(() => {
@@ -25,19 +45,33 @@ const ChatComponent = ({ sender, receiver }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await axios.get("http://localhost:3000/api/v1/message", {
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("token"),
-        },
-      });
-      const data = response.data.messages;
-      setMessages(data);
-      console.log("messages",messages)
+      try {
+        const response = await axios.get(
+          "http://localhost:3000/api/v1/message",
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+          }
+        );
+        const data = response.data.messages;
+        setMessages(data);
+      } catch (error) {
+        console.error("Error fetching messages:", error);
+      }
     };
+
+    // Fetch data initially
     fetchData();
-  }, [sentMessage]);
+
+    // Fetch data every 1 second
+    const interval = setInterval(fetchData, 1000);
+
+    // Clean up interval
+    return () => clearInterval(interval);
+  }, []);
   return (
-    <div className="flex-1 bg-gray-200 p-4">
+    <div className="flex-1 bg-gray-200 p-4" onKeyDown={handleKeyDown}>
       <div className="flex flex-col h-full">
         <div className="bg-gray-200 p-4 flex-grow">
           <div className="flex justify-between items-center mb-4">
@@ -47,15 +81,24 @@ const ChatComponent = ({ sender, receiver }) => {
             {/* Chat messages will go here */}
             <div className="flex flex-col space-y-2">
               {messages.map((item, index) => {
-                if (item.sender == sender && item.recipient == receiver) {
+                if (item.sender === sender && item.recipient === receiver) {
                   return (
-                    <div className="bg-blue-500 text-white py-2 px-4 rounded-r-lg self-end max-w-md">
+                    <div
+                      key={index}
+                      className="bg-blue-500 text-white py-2 px-4 rounded-r-lg self-end max-w-md"
+                    >
                       {item.content}
                     </div>
                   );
-                } else if (item.sender == receiver && item.recipient == sender) {
+                } else if (
+                  item.sender === receiver &&
+                  item.recipient === sender
+                ) {
                   return (
-                    <div className="bg-gray-300 py-2 px-4 rounded-l-lg self-start max-w-md">
+                    <div
+                      key={index}
+                      className="bg-gray-300 py-2 px-4 rounded-l-lg self-start max-w-md"
+                    >
                       {item.content}
                     </div>
                   );
@@ -72,6 +115,8 @@ const ChatComponent = ({ sender, receiver }) => {
             onChange={(e) => setNewMessage(e.target.value)}
             value={newMessage}
           />
+          <EmojiPicker onEmojiClick={handleEmojiClick} />{" "}
+          {/* Update component usage */}
           <button
             className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mt-2"
             onClick={handleSendMessage}

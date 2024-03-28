@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-mongoose.connect("mongodb://localhost:27017/chatApp");
+mongoose.connect("mongodb+srv://mohankuldeep1234:LubQRLiWKJLyz0WW@cluster0.ztkcsaw.mongodb.net/chatApp");
 const userSchema = new mongoose.Schema({
   username:String,
   email:String,

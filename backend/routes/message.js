@@ -53,4 +53,17 @@ router.post("/", async (req, res) => {
       key:"some error"
     })
   })
+  router.get("/all",async(req,res)=>
+  {
+    const messages = await Message.find({});
+    if(messages)
+    {
+      res.json({
+        messages,
+      })
+    }
+    else res.status(401).json({
+      key:"messages are empty",
+    })
+  })
 module.exports = router;

@@ -7,7 +7,8 @@ const Sidebar = () => {
   const [userList,setUserList] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [sender,setSender] = useState('');
-  const debouncedSearchTerm = useDebounce(searchTerm, 100); 
+  const [notification,setNotification] = useState([]);
+  const debouncedSearchTerm = useDebounce(searchTerm, 100);
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -22,6 +23,7 @@ const Sidebar = () => {
       } catch (error) {
         console.error("Error:", error);
       }
+
     };
     fetchUser();
   }, [debouncedSearchTerm]);
