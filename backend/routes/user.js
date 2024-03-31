@@ -4,13 +4,14 @@ const { User} = require("../db");
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("../config");
 const { authMiddleware } = require("../middleware");
+
 const multer = require("multer");
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
      return cb(null, '../frontend/src/components')
   },
   filename: function (req, file, cb) {
-    return cb(null,`${Date.now()}${++id}`);
+    return cb(null,`${Date.now()}-${file.originalname}`);
   },
 })
 
