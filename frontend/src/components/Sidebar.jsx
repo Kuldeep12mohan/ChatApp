@@ -7,7 +7,6 @@ const Sidebar = () => {
   const [userList,setUserList] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [sender,setSender] = useState('');
-  const [notification,setNotification] = useState([]);
   const debouncedSearchTerm = useDebounce(searchTerm, 100);
   const [selectedItem, setSelectedItem] = useState(null);
   useEffect(() => {
