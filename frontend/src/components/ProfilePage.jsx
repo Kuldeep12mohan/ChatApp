@@ -52,7 +52,7 @@ const ProfilePage = () => {
       <div className="flex flex-col items-center">
         <div className="mb-4 relative">
           {profileName}
-          <img src={imageSrc} alt="Profile" className="rounded-full w-32 h-32" />
+          <img src={profileImage} alt="Profile" className="rounded-full w-32 h-32" />
           <button onClick={() => navigate("/edit-profile")} className="absolute bottom-0 right-0 bg-gray-800 text-white text-sm px-2 py-1 rounded">
             Edit Profile
           </button>
