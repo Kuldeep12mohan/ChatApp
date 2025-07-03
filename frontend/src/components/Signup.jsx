@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { URI } from '../config';
 function Signup() {
   const [formData, setFormData] = useState({
     username: '',
@@ -20,7 +21,7 @@ function Signup() {
   const handleSubmit = async(e) => {
     e.preventDefault();
     // Handle signup logic, e.g., sending data to the server
-    const response = await axios.post("http://localhost:3000/api/v1/user/signup", formData);
+    const response = await axios.post(`${URI}/api/v1/user/signup`, formData);
     console.log(response);
     localStorage.setItem("token",response.data.token);
     console.log(response.token);

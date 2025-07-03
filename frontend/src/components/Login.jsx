@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { URI } from '../config';
 function Login() {
   const [formData, setFormData] = useState({
     email: '',
@@ -19,7 +20,7 @@ function Login() {
 
   const handleSubmit = async(e) => {
     e.preventDefault();
-    const response = await axios.post("http://localhost:3000/api/v1/user/login", formData);
+    const response = await axios.post(`${URI}/api/v1/user/login`, formData);
     console.log(response);
     localStorage.setItem("token",response.data.token);
     console.log(response.token);

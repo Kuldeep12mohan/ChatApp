@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import EmojiPicker from "emoji-picker-react"; // Update import statement
-
+import { URI } from "../config";
 const ChatComponent = ({ sender, receiver }) => {
   const [newMessage, setNewMessage] = useState("");
   const [sentMessage, setSentMessage] = useState(null);
@@ -34,7 +34,7 @@ const ChatComponent = ({ sender, receiver }) => {
     const putData = async () => {
       if (sentMessage) {
         try {
-          await axios.post("http://localhost:3000/api/v1/message", sentMessage);
+          await axios.post(`${URI}/api/v1/message`, sentMessage);
         } catch (error) {
           console.error("Error sending message:", error);
         }
@@ -47,7 +47,7 @@ const ChatComponent = ({ sender, receiver }) => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3000/api/v1/message",
+          `${URI}/api/v1/message`,
           {
             headers: {
               Authorization: "Bearer " + localStorage.getItem("token"),

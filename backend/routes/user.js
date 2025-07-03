@@ -1,8 +1,10 @@
 const express = require("express");
 const router = express.Router();
+const dotenv = require("dotenv");
+dotenv.config();
 const { User} = require("../db");
 const jwt = require("jsonwebtoken");
-const { JWT_SECRET } = require("../config");
+const JWT_SECRET  = process.env.JWT_SECRET;
 const { authMiddleware } = require("../middleware");
 
 const multer = require("multer");

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import useDebounce from "./useDebounce";
+import { URI } from "../config";
 const Sidebar = () => {
   const navigate = useNavigate();
   const [userList, setUserList] = useState([]);
@@ -16,7 +17,7 @@ const Sidebar = () => {
     const fetchUser = async () => {
       try {
         const log = await axios.get(
-          `http://localhost:3000/api/v1/user?username=${debouncedSearchTerm}`,
+          `${URI}/api/v1/user?username=${debouncedSearchTerm}`,
           {
             headers: {
               Authorization: "Bearer " + localStorage.getItem("token"),
@@ -46,7 +47,7 @@ const Sidebar = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3000/api/v1/message",
+          `${URI}/api/v1/message`,
           {
             headers: {
               Authorization: "Bearer " + localStorage.getItem("token"),

@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
-mongoose.connect("mongodb://localhost:27017/chatApp");
+const dotenv = require("dotenv")
+dotenv.config()
+mongoose.connect(process.env.DATABASE_URI);
 const userSchema = new mongoose.Schema({
   username:String,
   email:String,
@@ -12,7 +14,6 @@ const messageSchema = new mongoose.Schema({
   sender:String,
   recipient:String,
   content: String,
-  // timestamp: ISODate("2022-01-01T12:00:00Z")
 })
 const postSchema = new mongoose.Schema({
   userId:String,

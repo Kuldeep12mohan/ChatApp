@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const { User,Post} = require("../db");
 const jwt = require("jsonwebtoken");
-const { JWT_SECRET } = require("../config");
 const { authMiddleware } = require("../middleware");
 
 router.post("/",authMiddleware,async(req,res)=>

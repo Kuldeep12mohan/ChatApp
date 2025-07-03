@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-
+import { URI } from '../config';
 const CreatePostPage = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -18,7 +18,7 @@ const CreatePostPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:3000/api/v1/post", formData, {
+      const response = await axios.post(`${URI}/api/v1/post`, formData, {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
         }

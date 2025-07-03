@@ -1,0 +1,1 @@
+export const URI = "https://chatting-server-k7tj.onrender.com"
